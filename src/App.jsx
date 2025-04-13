@@ -1,7 +1,7 @@
 import { Box, Text, IconButton, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, VStack, useColorModeValue, Container, HStack, Icon, useColorMode } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
-import Assets from './pages/Assets';
+import Assets from './pages/assets';
 import Contact from './pages/Contact';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from './components/Footer';
