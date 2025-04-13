@@ -15,7 +15,7 @@ import {
   ButtonGroup,
   IconButton,
 } from '@chakra-ui/react';
-import { FaGithub, FaTwitter, FaLinkedin, FaEnvelope, FaPhone } from 'react-icons/fa';
+import { FaGithub, FaTwitter, FaLinkedin, FaEnvelope, FaPhone, FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -81,6 +81,39 @@ const Footer = () => {
                   href="https://linkedin.com"
                   aria-label="LinkedIn"
                   icon={<FaLinkedin size={24} />}
+                  size="md"
+                  isExternal
+                  variant="ghost"
+                  color={textColor}
+                  _hover={{ color: accentColor, bg: 'transparent' }}
+                />
+                <IconButton
+                  as={Link}
+                  href="https://facebook.com"
+                  aria-label="Facebook"
+                  icon={<FaFacebook size={24} />}
+                  size="md"
+                  isExternal
+                  variant="ghost"
+                  color={textColor}
+                  _hover={{ color: accentColor, bg: 'transparent' }}
+                />
+                <IconButton
+                  as={Link}
+                  href="https://instagram.com"
+                  aria-label="Instagram"
+                  icon={<FaInstagram size={24} />}
+                  size="md"
+                  isExternal
+                  variant="ghost"
+                  color={textColor}
+                  _hover={{ color: accentColor, bg: 'transparent' }}
+                />
+                <IconButton
+                  as={Link}
+                  href="https://wa.me/1234567890"
+                  aria-label="WhatsApp"
+                  icon={<FaWhatsapp size={24} />}
                   size="md"
                   isExternal
                   variant="ghost"

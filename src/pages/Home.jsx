@@ -1,30 +1,74 @@
-import { Box, Button, Container, Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Text, VStack, Image, Tag, HStack, Link, useColorModeValue } from '@chakra-ui/react';
 import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { detectTechnologies } from '../utils/techDetector';
 
 const projects = [
   {
     title: 'Project 1',
-    description: 'Description of Project 1',
+    description: 'A comprehensive web application built with React and Node.js. Features include user authentication, real-time updates, and responsive design.',
+    image: 'https://via.placeholder.com/400x250',
+    files: [
+      'src/App.jsx',
+      'server.js',
+      'package.json',
+      'database/mongo.js',
+      'styles/main.css'
+    ],
+    github: 'https://github.com',
+    demo: 'https://demo.com',
   },
   {
     title: 'Project 2',
-    description: 'Description of Project 2',
+    description: 'Mobile-first e-commerce platform with seamless payment integration and inventory management system built with Next.js and Firebase.',
+    image: 'https://via.placeholder.com/400x250',
+    files: [
+      'pages/index.tsx',
+      'firebase.config.js',
+      'components/Cart.tsx',
+      'styles/global.scss'
+    ],
+    github: 'https://github.com',
+    demo: 'https://demo.com',
   },
-  // Add more projects as needed
+  {
+    title: 'Project 3',
+    description: 'AI-powered data analytics dashboard using Python and TensorFlow for data processing and visualization.',
+    image: 'https://via.placeholder.com/400x250',
+    files: [
+      'app.py',
+      'models/neural_network.py',
+      'requirements.txt',
+      'Dockerfile'
+    ],
+    github: 'https://github.com',
+    demo: 'https://demo.com',
+  },
 ];
 
 const SLIDE_DURATION = 3000; // 3 seconds per slide
+const MotionBox = motion(Box);
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [slideDirection, setSlideDirection] = useState(1); // 1 for right
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length);
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % projects.length;
+      setSlideDirection(1); // Always slide right
+      return nextIndex;
+    });
   }, []);
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + projects.length) % projects.length);
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = (prevIndex - 1 + projects.length) % projects.length;
+      setSlideDirection(-1);
+      return nextIndex;
+    });
   };
 
   useEffect(() => {
@@ -41,73 +85,154 @@ const Home = () => {
 
   return (
     <Container 
-      maxW="container.xl" 
+      maxW="container.xl"
+      py={{ base: 8, md: 12 }}
     >
-      <VStack spacing={8} align="stretch">
-        <Heading as="h1" size="2xl">
-          Portfolio
-        </Heading>
-        
-        <Box mt={8}>
-          <Text fontSize="lg" textAlign="center">
-            Welcome to my portfolio. Explore my projects and creative work.
+      <VStack spacing={12} align="stretch">
+        <Box textAlign="center">
+          <Heading
+            as="h1"
+            fontSize={{ base: '4xl', md: '5xl', lg: '6xl' }}
+            fontWeight="bold"
+            bgGradient="linear(to-r, blue.400, purple.500)"
+            bgClip="text"
+            mb={6}
+          >
+            Welcome to My Portfolio
+          </Heading>
+          <Text 
+            fontSize={{ base: 'lg', md: 'xl' }}
+            color={useColorModeValue('gray.600', 'gray.400')}
+            maxW="3xl"
+            mx="auto"
+          >
+            Explore my journey through code and creativity. Each project represents a unique challenge and innovative solution.
           </Text>
         </Box>
 
         <Box 
-          mt={10} 
-          w="full" 
           position="relative" 
           overflow="hidden"
+          bg={useColorModeValue('white', 'gray.800')}
+          borderRadius="xl"
+          boxShadow="xl"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <Heading as="h2" size="lg" textAlign="center" mb={6}>
-            Project Showcase
+          <Heading 
+            as="h2" 
+            size="lg" 
+            textAlign="center" 
+            pt={8}
+            pb={4}
+            px={4}
+            bgGradient="linear(to-r, blue.400, purple.500)"
+            bgClip="text"
+          >
+            Featured Projects
           </Heading>
-          <Box 
-            display="flex" 
-            transition="transform 0.5s ease-in-out" 
-            transform={`translateX(-${currentIndex * 100}%)`}
-          >
-            {projects.map((project, index) => (
-              <Box 
-                key={index} 
-                flex="0 0 100%" 
-                p={6} 
-                borderWidth="1px" 
-                borderRadius="lg" 
-                boxShadow="md"
+          <AnimatePresence mode="wait">
+            <MotionBox
+              key={currentIndex}
+              initial={{ 
+                x: slideDirection === 1 ? '100%' : '-100%',
+                opacity: 0 
+              }}
+              animate={{ 
+                x: 0,
+                opacity: 1 
+              }}
+              exit={{ 
+                x: slideDirection === 1 ? '-100%' : '100%',
+                opacity: 0 
+              }}
+              transition={{ 
+                type: "tween",
+                duration: 0.5,
+                ease: "easeInOut"
+              }}
+              width="100%"
+              p={8}
+            >
+              <Box
+                display="flex"
+                flexDirection={{ base: "column", md: "row" }}
+                gap={8}
+                alignItems="center"
               >
-                <Heading size="md">{project.title}</Heading>
-                <Text mt={2}>{project.description}</Text>
+                <Box
+                  flex="1"
+                  position="relative"
+                  height={{ base: "200px", md: "300px" }}
+                  width="100%"
+                  overflow="hidden"
+                  borderRadius="lg"
+                >
+                  <Image
+                    src={projects[currentIndex].image}
+                    alt={projects[currentIndex].title}
+                    objectFit="cover"
+                    width="100%"
+                    height="100%"
+                    transition="transform 0.5s ease"
+                    _hover={{ transform: 'scale(1.05)' }}
+                  />
+                </Box>
+                <Box flex="1">
+                  <Heading
+                    as="h3"
+                    size="lg"
+                    mb={4}
+                    color={useColorModeValue('gray.800', 'white')}
+                  >
+                    {projects[currentIndex].title}
+                  </Heading>
+                  <Text
+                    color={useColorModeValue('gray.600', 'gray.300')}
+                    mb={6}
+                    fontSize="md"
+                    lineHeight="tall"
+                  >
+                    {projects[currentIndex].description}
+                  </Text>
+                  <HStack spacing={2} mb={6} flexWrap="wrap" gap={2}>
+                    {detectTechnologies(projects[currentIndex].files, projects[currentIndex].description).map((tech) => (
+                      <Tag
+                        key={tech}
+                        size="md"
+                        variant="subtle"
+                        colorScheme="blue"
+                        borderRadius="full"
+                        px={4}
+                        py={1}
+                      >
+                        {tech}
+                      </Tag>
+                    ))}
+                  </HStack>
+                  <HStack spacing={4}>
+                    <Link href={projects[currentIndex].github} isExternal>
+                      <Button
+                        leftIcon={<FaGithub />}
+                        colorScheme="blue"
+                        variant="outline"
+                      >
+                        View Code
+                      </Button>
+                    </Link>
+                    <Link href={projects[currentIndex].demo} isExternal>
+                      <Button
+                        leftIcon={<FaExternalLinkAlt />}
+                        colorScheme="blue"
+                      >
+                        Live Demo
+                      </Button>
+                    </Link>
+                  </HStack>
+                </Box>
               </Box>
-            ))}
-          </Box>
-          <Button 
-            onClick={prevSlide} 
-            position="absolute" 
-            left={0} 
-            top="50%" 
-            transform="translateY(-50%)"
-            opacity={isPaused ? 1 : 0}
-            transition="opacity 0.3s"
-            _hover={{ opacity: 1 }}
-          >
-            Prev
-          </Button>
-          <Button 
-            onClick={nextSlide} 
-            position="absolute" 
-            right={0} 
-            top="50%" 
-            transform="translateY(-50%)"
-            opacity={isPaused ? 1 : 0}
-            transition="opacity 0.3s"
-            _hover={{ opacity: 1 }}
-          >
-            Next
-          </Button>
+            </MotionBox>
+          </AnimatePresence>
         </Box>
       </VStack>
     </Container>

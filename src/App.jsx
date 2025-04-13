@@ -1,4 +1,4 @@
-import { ChakraProvider, Box, Text, IconButton, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, VStack, useColorModeValue, Container, HStack, Icon } from '@chakra-ui/react';
+import { Box, Text, IconButton, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, VStack, useColorModeValue, Container, HStack, Icon, useColorMode } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import Assets from './pages/Assets';
@@ -6,7 +6,7 @@ import Contact from './pages/Contact';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from './components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HamburgerIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, SunIcon, MoonIcon } from '@chakra-ui/icons';
 import { FaRocket } from 'react-icons/fa';
 
 const MotionBox = motion(Box);
@@ -129,187 +129,246 @@ function ErrorFallback({ error }) {
 
 function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <ChakraProvider>
-        <Router>
+      <Router>
+        <Box
+          display="flex"
+          flexDirection="column"
+          minH="100vh"
+          position="relative"
+          bg={useColorModeValue('gray.50', 'gray.900')}
+        >
+          {/* Header */}
           <Box
-            display="flex"
-            flexDirection="column"
-            minH="100vh"
-            position="relative"
+            as="header"
+            position="fixed"
+            top={0}
+            left={0}
+            right={0}
+            zIndex={1000}
+            bg={useColorModeValue('white', 'gray.800')}
+            boxShadow="sm"
+            height={{ base: "60px", md: "70px", lg: "80px" }}
+            transform="translateZ(0)"
+            backdropFilter="blur(8px)"
+            backgroundColor={useColorModeValue('rgba(255, 255, 255, 0.9)', 'rgba(26, 32, 44, 0.9)')}
+            borderBottom="1px solid"
+            borderColor={useColorModeValue('gray.200', 'gray.700')}
           >
-            {/* Header */}
-            <Box
-              as="header"
-              position="fixed"
-              top={0}
-              left={0}
-              right={0}
-              zIndex={1000}
-              bg={useColorModeValue('white', 'gray.800')}
-              boxShadow="sm"
-              height={{ base: "60px", md: "70px", lg: "80px" }}
-              transform="translateZ(0)"
-              backdropFilter="blur(8px)"
-              backgroundColor={useColorModeValue('rgba(255, 255, 255, 0.9)', 'rgba(26, 32, 44, 0.9)')}
+            <Container 
+              maxW="container.xl" 
+              px={{ base: 4, md: 6, lg: 8 }}
+              height="100%"
             >
-              <Container 
-                maxW="container.xl" 
-                px={{ base: 4, md: 6, lg: 8 }}
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
                 height="100%"
               >
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
+                <Link to="/">
+                  <Box position="relative" p={2}>
+                    <AnimatedRocket />
+                    <Text
+                      fontSize={{ base: 'xl', md: '2xl' }}
+                      fontWeight="bold"
+                      bgGradient="linear(to-r, blue.400, purple.500)"
+                      bgClip="text"
+                      position="relative"
+                      zIndex={1}
+                    >
+                      Portfolio
+                    </Text>
+                  </Box>
+                </Link>
+
+                {/* Desktop Navigation */}
+                <HStack
+                  spacing={{ base: 4, md: 6, lg: 8 }}
+                  display={{ base: 'none', md: 'flex' }}
                   alignItems="center"
-                  height="100%"
                 >
                   <Link to="/">
-                    <Box position="relative" p={2}>
-                      <AnimatedRocket />
-                      <Text
-                        fontSize={{ base: 'xl', md: '2xl' }}
-                        fontWeight="bold"
-                        bgGradient="linear(to-r, blue.400, purple.500)"
-                        bgClip="text"
-                        position="relative"
-                        zIndex={1}
-                      >
-                        Portfolio
-                      </Text>
-                    </Box>
+                    <MotionBox
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      px={3}
+                      py={2}
+                    >
+                      Home
+                    </MotionBox>
                   </Link>
-
-                  {/* Desktop Navigation */}
-                  <HStack
-                    spacing={{ base: 4, md: 6, lg: 8 }}
-                    display={{ base: 'none', md: 'flex' }}
+                  <Link to="/assets">
+                    <MotionBox
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      px={3}
+                      py={2}
+                    >
+                      Proof of Work
+                    </MotionBox>
+                  </Link>
+                  <Link to="/contact">
+                    <MotionBox
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      px={3}
+                      py={2}
+                    >
+                      Contact Us
+                    </MotionBox>
+                  </Link>
+                  <MotionBox
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <Link to="/">
-                      <MotionBox
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        px={3}
-                        py={2}
-                      >
-                        Home
-                      </MotionBox>
-                    </Link>
-                    <Link to="/assets">
-                      <MotionBox
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        px={3}
-                        py={2}
-                      >
-                        Proof of Work
-                      </MotionBox>
-                    </Link>
-                    <Link to="/contact">
-                      <MotionBox
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        px={3}
-                        py={2}
-                      >
-                        Contact Us
-                      </MotionBox>
-                    </Link>
-                  </HStack>
+                    <IconButton
+                      onClick={toggleColorMode}
+                      icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                      variant="unstyled"
+                      colorScheme="blue"
+                      aria-label={`Toggle ${colorMode === 'light' ? 'Dark' : 'Light'} Mode`}
+                      _hover={{
+                        bg: useColorModeValue('blue.50', 'blue.900'),
+                      }}
+                      _active={{
+                        border: 'none',
+                        outline: 'none',
+                        boxShadow: 'none'
+                      }}
+                      _focus={{
+                        border: 'none',
+                        outline: 'none',
+                        boxShadow: 'none'
+                      }}
+                      sx={{
+                        border: 'none !important',
+                        outline: 'none !important',
+                        boxShadow: 'none !important'
+                      }}
+                    />
+                  </MotionBox>
+                </HStack>
 
-                  {/* Mobile Menu Button */}
+                {/* Mobile Navigation */}
+                <HStack spacing={2} display={{ base: 'flex', md: 'none' }}>
                   <IconButton
-                    display={{ base: 'flex', md: 'none' }}
+                    onClick={toggleColorMode}
+                    icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                    variant="unstyled"
+                    colorScheme="blue"
+                    aria-label={`Toggle ${colorMode === 'light' ? 'Dark' : 'Light'} Mode`}
+                    _hover={{
+                      bg: useColorModeValue('blue.50', 'blue.900'),
+                    }}
+                    _active={{
+                      border: 'none',
+                      outline: 'none',
+                      boxShadow: 'none'
+                    }}
+                    _focus={{
+                      border: 'none',
+                      outline: 'none',
+                      boxShadow: 'none'
+                    }}
+                    sx={{
+                      border: 'none !important',
+                      outline: 'none !important',
+                      boxShadow: 'none !important'
+                    }}
+                  />
+                  <IconButton
                     onClick={onOpen}
                     icon={<HamburgerIcon />}
                     variant="ghost"
                     aria-label="Open menu"
                   />
-                </Box>
-              </Container>
-            </Box>
-
-            {/* Mobile Navigation Drawer */}
-            <AnimatePresence>
-              {isOpen && (
-                <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-                  <DrawerOverlay />
-                  <MotionDrawerContent
-                    initial={{ x: '100%' }}
-                    animate={{ x: 0 }}
-                    exit={{ x: '100%' }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    position="relative"
-                  >
-                    <HoneycombPattern isOpen={isOpen} />
-                    <Box position="relative" zIndex={2}>
-                      <DrawerCloseButton />
-                      <DrawerHeader>Menu</DrawerHeader>
-                      <DrawerBody>
-                        <VStack spacing={4} align="stretch">
-                          <Link to="/" onClick={onClose}>
-                            <MotionBox
-                              whileHover={{ scale: 1.05, x: 10 }}
-                              whileTap={{ scale: 0.95 }}
-                              p={2}
-                            >
-                              Home
-                            </MotionBox>
-                          </Link>
-                          <Link to="/assets" onClick={onClose}>
-                            <MotionBox
-                              whileHover={{ scale: 1.05, x: 10 }}
-                              whileTap={{ scale: 0.95 }}
-                              p={2}
-                            >
-                              Proof of Work
-                            </MotionBox>
-                          </Link>
-                          <Link to="/contact" onClick={onClose}>
-                            <MotionBox
-                              whileHover={{ scale: 1.05, x: 10 }}
-                              whileTap={{ scale: 0.95 }}
-                              p={2}
-                            >
-                              Contact Us
-                            </MotionBox>
-                          </Link>
-                        </VStack>
-                      </DrawerBody>
-                    </Box>
-                  </MotionDrawerContent>
-                </Drawer>
-              )}
-            </AnimatePresence>
-
-            {/* Main Content Wrapper */}
-            <Box
-              as="main"
-              flex="1"
-              mt={{ base: "60px", md: "70px", lg: "80px" }}
-              position="relative"
-              zIndex={1}
-              width="100%"
-            >
-              <Container
-                maxW="container.xl"
-                px={{ base: 4, md: 6, lg: 8 }}
-                py={{ base: 6, md: 8, lg: 10 }}
-              >
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/assets" element={<Assets />} />
-                  <Route path="/contact" element={<Contact />} />
-                </Routes>
-              </Container>
-            </Box>
-
-            <Footer />
+                </HStack>
+              </Box>
+            </Container>
           </Box>
-        </Router>
-      </ChakraProvider>
+
+          {/* Mobile Navigation Drawer */}
+          <AnimatePresence>
+            {isOpen && (
+              <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+                <DrawerOverlay />
+                <MotionDrawerContent
+                  initial={{ x: '100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100%' }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  position="relative"
+                >
+                  <HoneycombPattern isOpen={isOpen} />
+                  <Box position="relative" zIndex={2}>
+                    <DrawerCloseButton />
+                    <DrawerHeader>Menu</DrawerHeader>
+                    <DrawerBody>
+                      <VStack spacing={4} align="stretch">
+                        <Link to="/" onClick={onClose}>
+                          <MotionBox
+                            whileHover={{ scale: 1.05, x: 10 }}
+                            whileTap={{ scale: 0.95 }}
+                            p={2}
+                          >
+                            Home
+                          </MotionBox>
+                        </Link>
+                        <Link to="/assets" onClick={onClose}>
+                          <MotionBox
+                            whileHover={{ scale: 1.05, x: 10 }}
+                            whileTap={{ scale: 0.95 }}
+                            p={2}
+                          >
+                            Proof of Work
+                          </MotionBox>
+                        </Link>
+                        <Link to="/contact" onClick={onClose}>
+                          <MotionBox
+                            whileHover={{ scale: 1.05, x: 10 }}
+                            whileTap={{ scale: 0.95 }}
+                            p={2}
+                          >
+                            Contact Us
+                          </MotionBox>
+                        </Link>
+                      </VStack>
+                    </DrawerBody>
+                  </Box>
+                </MotionDrawerContent>
+              </Drawer>
+            )}
+          </AnimatePresence>
+
+          {/* Main Content Wrapper */}
+          <Box
+            as="main"
+            flex="1"
+            mt={{ base: "60px", md: "70px", lg: "80px" }}
+            position="relative"
+            zIndex={1}
+            width="100%"
+          >
+            <Container
+              maxW="container.xl"
+              px={{ base: 4, md: 6, lg: 8 }}
+              py={{ base: 6, md: 8, lg: 10 }}
+            >
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/assets" element={<Assets />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+            </Container>
+          </Box>
+
+          <Footer />
+        </Box>
+      </Router>
     </ErrorBoundary>
   );
 }
