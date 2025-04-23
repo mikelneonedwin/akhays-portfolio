@@ -1,46 +1,48 @@
-import { Box, Button, Container, Heading, Text, VStack, Image, Tag, HStack, Link, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Text, VStack, Image, Tag, HStack, Link, useColorModeValue, Icon, SimpleGrid, Flex } from '@chakra-ui/react';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaCode, FaDatabase, FaServer, FaPalette } from 'react-icons/fa';
 import { detectTechnologies } from '../utils/techDetector';
+import '../styles/animations.css';
 
 const projects = [
   {
-    title: 'Project 1',
-    description: 'A comprehensive web application built with React and Node.js. Features include user authentication, real-time updates, and responsive design.',
-    image: 'https://via.placeholder.com/400x250',
-    files: [
-      'src/App.jsx',
-      'server.js',
-      'package.json',
-      'database/mongo.js',
-      'styles/main.css'
-    ],
-    github: 'https://github.com',
-    demo: 'https://demo.com',
-  },
-  {
-    title: 'Project 2',
-    description: 'Mobile-first e-commerce platform with seamless payment integration and inventory management system built with Next.js and Firebase.',
-    image: 'https://via.placeholder.com/400x250',
-    files: [
-      'pages/index.tsx',
-      'firebase.config.js',
-      'components/Cart.tsx',
-      'styles/global.scss'
-    ],
-    github: 'https://github.com',
-    demo: 'https://demo.com',
-  },
-  {
-    title: 'Project 3',
-    description: 'AI-powered data analytics dashboard using Python and TensorFlow for data processing and visualization.',
-    image: 'https://via.placeholder.com/400x250',
+    title: 'Flask REST API',
+    description: 'A comprehensive backend system featuring JWT authentication, SQLAlchemy ORM, and Swagger documentation. Includes user management, role-based access control, and automated testing.',
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     files: [
       'app.py',
-      'models/neural_network.py',
-      'requirements.txt',
-      'Dockerfile'
+      'models/user.py',
+      'routes/auth.py',
+      'tests/test_api.py',
+      'config.py'
+    ],
+    github: 'https://github.com',
+    demo: 'https://demo.com',
+  },
+  {
+    title: 'AI Image Editor',
+    description: 'An intelligent image processing application that leverages OpenAI\'s CLIP model for smart image classification and editing. Built with Python and modern AI frameworks.',
+    image: 'https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    files: [
+      'main.py',
+      'services/ai_processor.py',
+      'utils/image_utils.py',
+      'models/clip_model.py'
+    ],
+    github: 'https://github.com',
+    demo: 'https://demo.com',
+  },
+  {
+    title: 'Hospital Management System',
+    description: 'A full-stack healthcare management solution with appointment scheduling, patient records, and medical inventory tracking. Features real-time updates and secure data handling.',
+    image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    files: [
+      'server/app.py',
+      'database/models.py',
+      'services/scheduler.py',
+      'api/appointments.py',
+      'utils/security.py'
     ],
     github: 'https://github.com',
     demo: 'https://demo.com',
@@ -49,6 +51,71 @@ const projects = [
 
 const SLIDE_DURATION = 3000; // 3 seconds per slide
 const MotionBox = motion(Box);
+const MotionFlex = motion(Flex);
+
+const skills = [
+  { name: 'Frontend Development', icon: FaCode, description: 'Building responsive and interactive user interfaces with modern frameworks.' },
+  { name: 'Backend Development', icon: FaServer, description: 'Creating robust server-side applications and APIs.' },
+  { name: 'Database Design', icon: FaDatabase, description: 'Designing and optimizing database schemas and queries.' },
+  { name: 'UI/UX Design', icon: FaPalette, description: 'Crafting beautiful and intuitive user experiences.' },
+];
+
+const VideoBackground = () => (
+  <Box
+    position="absolute"
+    top={0}
+    left={0}
+    width="100%"
+    height="100%"
+    overflow="hidden"
+    zIndex={0}
+  >
+    <Box
+      as="video"
+      position="absolute"
+      top="50%"
+      left="50%"
+      minWidth="100%"
+      minHeight="100%"
+      width="auto"
+      height="auto"
+      transform="translate(-50%, -50%)"
+      objectFit="cover"
+      autoPlay
+      muted
+      loop
+      playsInline
+      src="https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4"
+      opacity={0.15}
+    />
+  </Box>
+);
+
+const SkillCard = ({ skill }) => (
+  <MotionBox
+    whileHover={{ y: -5, boxShadow: 'xl' }}
+    transition={{ duration: 0.2 }}
+    bg={useColorModeValue('white', 'gray.800')}
+    p={6}
+    borderRadius="lg"
+    boxShadow="md"
+    textAlign="center"
+  >
+    <Icon
+      as={skill.icon}
+      w={10}
+      h={10}
+      mb={4}
+      color={useColorModeValue('blue.500', 'blue.300')}
+    />
+    <Heading size="md" mb={2}>
+      {skill.name}
+    </Heading>
+    <Text color={useColorModeValue('gray.600', 'gray.400')}>
+      {skill.description}
+    </Text>
+  </MotionBox>
+);
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -84,31 +151,134 @@ const Home = () => {
   }, [isPaused, nextSlide]);
 
   return (
-    <Container 
-      maxW="container.xl"
-      py={{ base: 8, md: 12 }}
-    >
-      <VStack spacing={12} align="stretch">
-        <Box textAlign="center">
+    <Box>
+      {/* Hero Section */}
+      <Box
+        position="relative"
+        height={{ base: "90vh", md: "100vh" }}
+        display="flex"
+        alignItems="center"
+        overflow="hidden"
+      >
+        <VideoBackground />
+        <Container maxW="container.xl" position="relative" zIndex={1}>
+          <MotionFlex
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            direction="column"
+            align="center"
+            textAlign="center"
+          >
           <Heading
             as="h1"
-            fontSize={{ base: '4xl', md: '5xl', lg: '6xl' }}
+              fontSize={{ base: '4xl', md: '5xl', lg: '7xl' }}
             fontWeight="bold"
-            bgGradient="linear(to-r, blue.400, purple.500)"
-            bgClip="text"
+              className="fire-text"
             mb={6}
           >
-            Welcome to My Portfolio
+              Backend Developer Portfolio
           </Heading>
           <Text 
-            fontSize={{ base: 'lg', md: 'xl' }}
-            color={useColorModeValue('gray.600', 'gray.400')}
+              fontSize={{ base: 'xl', md: '2xl' }}
+              color={useColorModeValue('gray.700', 'gray.300')}
             maxW="3xl"
-            mx="auto"
-          >
-            Explore my journey through code and creativity. Each project represents a unique challenge and innovative solution.
+              mb={8}
+            >
+              Providing the best Project Experience with innovative solutions and scalable architecture.
+            </Text>
+            <Button
+              as={motion.button}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              size="lg"
+              px={8}
+              color="white"
+              className="fire-button"
+              _hover={{
+                transform: "translateY(-2px)",
+                boxShadow: "xl",
+              }}
+              onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
+            >
+              View My Work
+            </Button>
+          </MotionFlex>
+        </Container>
+      </Box>
+
+      {/* Skills Section */}
+      <Box
+        py={{ base: 16, md: 24 }}
+        position="relative"
+        overflow="hidden"
+      >
+        <Container maxW="container.xl">
+          <VStack spacing={12}>
+            <Heading
+              as="h2"
+              fontSize={{ base: '3xl', md: '4xl' }}
+              textAlign="center"
+              mb={8}
+              className="fire-text"
+            >
+              My Skills
+            </Heading>
+            <SimpleGrid
+              columns={{ base: 1, md: 2, lg: 4 }}
+              spacing={8}
+              width="100%"
+            >
+              {skills.map((skill, index) => (
+                <MotionBox
+                  key={index}
+                  whileHover={{ y: -5, boxShadow: 'xl' }}
+                  transition={{ duration: 0.2 }}
+                  bg="rgba(26, 32, 44, 0.7)"
+                  p={6}
+                  borderRadius="lg"
+                  boxShadow="md"
+                  textAlign="center"
+                  border="1px solid"
+                  borderColor="whiteAlpha.200"
+                  backdropFilter="blur(10px)"
+                >
+                  <Icon
+                    as={skill.icon}
+                    w={10}
+                    h={10}
+                    mb={4}
+                    className="fire-icon"
+                  />
+                  <Heading size="md" mb={2} color="whiteAlpha.900">
+                    {skill.name}
+                  </Heading>
+                  <Text color="whiteAlpha.800">
+                    {skill.description}
           </Text>
+                </MotionBox>
+              ))}
+            </SimpleGrid>
+          </VStack>
+        </Container>
         </Box>
+
+      {/* Projects Section */}
+      <Box
+        id="projects"
+        py={{ base: 16, md: 24 }}
+      >
+        <Container maxW="container.xl">
+          <VStack spacing={12}>
+            <Heading
+              as="h2"
+              fontSize={{ base: '3xl', md: '4xl' }}
+              textAlign="center"
+              mb={8}
+              className="fire-text"
+            >
+              Featured Projects
+            </Heading>
 
         <Box 
           position="relative" 
@@ -118,19 +288,8 @@ const Home = () => {
           boxShadow="xl"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-        >
-          <Heading 
-            as="h2" 
-            size="lg" 
-            textAlign="center" 
-            pt={8}
-            pb={4}
-            px={4}
-            bgGradient="linear(to-r, blue.400, purple.500)"
-            bgClip="text"
-          >
-            Featured Projects
-          </Heading>
+              width="100%"
+            >
           <AnimatePresence mode="wait">
             <MotionBox
               key={currentIndex}
@@ -236,6 +395,8 @@ const Home = () => {
         </Box>
       </VStack>
     </Container>
+      </Box>
+    </Box>
   );
 };
 

@@ -14,8 +14,46 @@ import {
   useColorModeValue,
   ButtonGroup,
   IconButton,
+  SimpleGrid,
+  Stack,
+  Tooltip,
 } from '@chakra-ui/react';
-import { FaGithub, FaTwitter, FaLinkedin, FaEnvelope, FaPhone, FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaGithub, FaTwitter, FaLinkedin, FaEnvelope, FaPhone, FaFacebook, FaInstagram, FaWhatsapp, FaArrowUp } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+
+const MotionIconButton = motion(IconButton);
+const MotionBox = motion(Box);
+
+const SocialIcon = ({ icon: Icon, href, label }) => (
+  <Tooltip label={label} hasArrow placement="top">
+    <MotionBox
+      as="a"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      display="inline-flex"
+      alignItems="center"
+      justifyContent="center"
+      w="50px"
+      h="50px"
+      borderRadius="full"
+      bg="rgba(26, 32, 44, 0.7)"
+      border="1px solid"
+      borderColor="whiteAlpha.200"
+      backdropFilter="blur(10px)"
+      className="fire-card"
+      whileHover={{ 
+        scale: 1.2,
+        rotate: 360,
+        transition: { duration: 0.5 }
+      }}
+      whileTap={{ scale: 0.9 }}
+      initial={{ rotate: 0 }}
+    >
+      <Icon size="24px" className="fire-icon" color="whiteAlpha.900" />
+    </MotionBox>
+  </Tooltip>
+);
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -25,168 +63,121 @@ const Footer = () => {
   const headingColor = useColorModeValue('gray.700', 'white');
   const accentColor = useColorModeValue('blue.500', 'blue.300');
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const socialLinks = [
+    {
+      label: 'GitHub',
+      icon: FaGithub,
+      href: 'https://github.com/yourusername',
+    },
+    {
+      label: 'LinkedIn',
+      icon: FaLinkedin,
+      href: 'https://linkedin.com/in/yourusername',
+    },
+    {
+      label: 'Twitter',
+      icon: FaTwitter,
+      href: 'https://twitter.com/yourusername',
+    },
+    {
+      label: 'Email',
+      icon: FaEnvelope,
+      href: 'mailto:your.email@example.com',
+    },
+  ];
+
   return (
     <Box
       as="footer"
-      bg={bgColor}
-      color={textColor}
-      borderTop="1px"
-      borderColor={borderColor}
+      bg="gray.300"
+      borderTop="1px solid"
+      borderColor="whiteAlpha.200"
+      position="relative"
     >
       <Container maxW="container.xl" py={10}>
-        <Grid 
-          templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-          gap={{ base: 8, md: 12 }}
+        <SimpleGrid
+          columns={{ base: 1, md: 3 }}
+          spacing={8}
+          mb={8}
         >
-          {/* Company Info */}
-          <GridItem>
-            <VStack align="flex-start" spacing={4}>
-              <Heading 
-                as="h3"
-                size="md"
-                color={headingColor}
-                fontWeight="600"
-              >
-                Portfolio
-              </Heading>
-              <Text fontSize="sm" lineHeight="tall">
-                Creating beautiful digital experiences with cutting-edge technology
-                and thoughtful design.
-              </Text>
-              <HStack spacing={4} pt={2}>
-                <IconButton
-                  as={Link}
-                  href="https://github.com"
-                  aria-label="GitHub"
-                  icon={<FaGithub size={24} />}
-                  size="md"
-                  isExternal
-                  variant="ghost"
-                  color={textColor}
-                  _hover={{ color: accentColor, bg: 'transparent' }}
-                />
-                <IconButton
-                  as={Link}
-                  href="https://twitter.com"
-                  aria-label="Twitter"
-                  icon={<FaTwitter size={24} />}
-                  size="md"
-                  isExternal
-                  variant="ghost"
-                  color={textColor}
-                  _hover={{ color: accentColor, bg: 'transparent' }}
-                />
-                <IconButton
-                  as={Link}
-                  href="https://linkedin.com"
-                  aria-label="LinkedIn"
-                  icon={<FaLinkedin size={24} />}
-                  size="md"
-                  isExternal
-                  variant="ghost"
-                  color={textColor}
-                  _hover={{ color: accentColor, bg: 'transparent' }}
-                />
-                <IconButton
-                  as={Link}
-                  href="https://facebook.com"
-                  aria-label="Facebook"
-                  icon={<FaFacebook size={24} />}
-                  size="md"
-                  isExternal
-                  variant="ghost"
-                  color={textColor}
-                  _hover={{ color: accentColor, bg: 'transparent' }}
-                />
-                <IconButton
-                  as={Link}
-                  href="https://instagram.com"
-                  aria-label="Instagram"
-                  icon={<FaInstagram size={24} />}
-                  size="md"
-                  isExternal
-                  variant="ghost"
-                  color={textColor}
-                  _hover={{ color: accentColor, bg: 'transparent' }}
-                />
-                <IconButton
-                  as={Link}
-                  href="https://wa.me/1234567890"
-                  aria-label="WhatsApp"
-                  icon={<FaWhatsapp size={24} />}
-                  size="md"
-                  isExternal
-                  variant="ghost"
-                  color={textColor}
-                  _hover={{ color: accentColor, bg: 'transparent' }}
-                />
-              </HStack>
-            </VStack>
-          </GridItem>
+          {/* Brand Section */}
+          <VStack align="flex-start" spacing={4}>
+            <Heading size="md" className="fire-text">Portfolio</Heading>
+            <Text fontSize="sm" color="whiteAlpha.900">
+              Building the future through code, one project at a time.
+            </Text>
+          </VStack>
 
-          {/* Links */}
-          <GridItem>
-            <VStack align="flex-start" spacing={4}>
-              <Heading 
-                as="h3" 
-                size="md"
-                color={headingColor}
-                fontWeight="600"
-              >
-                Quick Links
-              </Heading>
-              <VStack align="flex-start" spacing={2}>
-                <Link href="/" _hover={{ color: accentColor }}>Home</Link>
-                <Link href="/assets" _hover={{ color: accentColor }}>Projects</Link>
-                <Link href="/contact" _hover={{ color: accentColor }}>Contact</Link>
-              </VStack>
-            </VStack>
-          </GridItem>
+          {/* Quick Links */}
+          <VStack align="flex-start" spacing={4}>
+            <Heading size="md" color="whiteAlpha.900">Quick Links</Heading>
+            <Stack spacing={2}>
+              <Link href="/" className="fire-nav-item" color="whiteAlpha.900">Home</Link>
+              <Link href="/assets" className="fire-nav-item" color="whiteAlpha.900">Projects</Link>
+              <Link href="/contact" className="fire-nav-item" color="whiteAlpha.900">Contact</Link>
+            </Stack>
+          </VStack>
 
-          {/* Contact Info */}
-          <GridItem>
-            <VStack align="flex-start" spacing={4}>
-              <Heading 
-                as="h3" 
-                size="md"
-                color={headingColor}
-                fontWeight="600"
-              >
-                Contact
-              </Heading>
-              <VStack align="flex-start" spacing={2}>
-                <Flex align="center">
-                  <Icon as={FaEnvelope} mr={2} boxSize={5} />
-                  <Link href="mailto:contact@portfolio.com" _hover={{ color: accentColor }}>
-                    contact@portfolio.com
-                  </Link>
-                </Flex>
-                <Flex align="center">
-                  <Icon as={FaPhone} mr={2} boxSize={5} />
-                  <Text>+1 (555) 123-4567</Text>
-                </Flex>
-              </VStack>
-            </VStack>
-          </GridItem>
-        </Grid>
+          {/* Social Links */}
+          <VStack align="flex-start" spacing={4}>
+            <Heading size="md" color="whiteAlpha.900">Connect</Heading>
+            <HStack spacing={4}>
+              {socialLinks.map((social) => (
+                <SocialIcon
+                  key={social.label}
+                  icon={social.icon}
+                  href={social.href}
+                  label={social.label}
+                />
+              ))}
+            </HStack>
+          </VStack>
+        </SimpleGrid>
         
-        <Divider my={8} borderColor={borderColor} />
+        <Divider my={8} borderColor="whiteAlpha.200" />
         
-        <Flex 
-          justify="space-between" 
-          align="center"
-          direction={{ base: "column", sm: "row" }}
-          gap={{ base: 4, sm: 0 }}
-          textAlign={{ base: "center", sm: "left" }}
+        <Box
+          pt={8}
+          borderTop="1px solid"
+          borderColor="whiteAlpha.200"
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap="wrap"
+          gap={4}
         >
-          <Text fontSize="sm">
+          <Text fontSize="sm" color="whiteAlpha.900">
             © {currentYear} Portfolio. All rights reserved.
           </Text>
-          <HStack spacing={6} fontSize="sm">
-            <Link href="#" _hover={{ color: accentColor }}>Privacy Policy</Link>
-            <Link href="#" _hover={{ color: accentColor }}>Terms of Service</Link>
-          </HStack>
-        </Flex>
+          <MotionBox
+            whileHover={{ 
+              scale: 1.2,
+              rotate: 360,
+              transition: { duration: 0.5 }
+            }}
+            whileTap={{ scale: 0.9 }}
+            initial={{ rotate: 0 }}
+            display="inline-flex"
+            alignItems="center"
+            justifyContent="center"
+            w="50px"
+            h="50px"
+            borderRadius="full"
+            bg="rgba(26, 32, 44, 0.7)"
+            border="1px solid"
+            borderColor="whiteAlpha.200"
+            backdropFilter="blur(10px)"
+            className="fire-card"
+            cursor="pointer"
+            onClick={scrollToTop}
+          >
+            <FaArrowUp size="20px" className="fire-icon" color="whiteAlpha.900" />
+          </MotionBox>
+        </Box>
       </Container>
     </Box>
   );

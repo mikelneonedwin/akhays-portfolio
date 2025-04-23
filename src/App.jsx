@@ -1,19 +1,20 @@
-import { Box, Text, IconButton, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, VStack, useColorModeValue, Container, HStack, Icon, useColorMode } from '@chakra-ui/react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Box, Text, IconButton, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, VStack, Container, HStack, Icon, Heading } from '@chakra-ui/react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Assets from './pages/assets';
 import Contact from './pages/Contact';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from './components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HamburgerIcon, SunIcon, MoonIcon } from '@chakra-ui/icons';
-import { FaRocket } from 'react-icons/fa';
+import { HamburgerIcon } from '@chakra-ui/icons';
+import { FaRocket, FaCode, FaPalette, FaGlobe } from 'react-icons/fa';
+import './styles/animations.css';
 
 const MotionBox = motion(Box);
 const MotionDrawerContent = motion(DrawerContent);
 const MotionIcon = motion(Icon);
 
-// Animated Rocket component
+// Enhanced AnimatedRocket component
 const AnimatedRocket = () => {
   const rocketPath = {
     start: { x: -20, y: 10 },
@@ -26,10 +27,10 @@ const AnimatedRocket = () => {
       animate={{
         x: [rocketPath.start.x, rocketPath.end.x, rocketPath.start.x],
         y: [rocketPath.start.y, rocketPath.end.y, rocketPath.start.y],
-        rotate: [0, 10, 0],
+        rotate: [0, 15, 0],
       }}
       transition={{
-        duration: 2,
+        duration: 3,
         repeat: Infinity,
         ease: "easeInOut"
       }}
@@ -40,17 +41,40 @@ const AnimatedRocket = () => {
     >
       <Icon 
         as={FaRocket} 
-        color={useColorModeValue('blue.400', 'blue.300')}
-        w={4} 
-        h={4}
+        color="brand.500"
+        w={5} 
+        h={5}
+        className="fire-icon"
+        filter="drop-shadow(0 0 8px rgba(255, 77, 77, 0.6))"
       />
     </MotionBox>
   );
 };
 
+// Enhanced navigation item component
+const NavItem = ({ to, children }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+  
+  return (
+    <Link to={to}>
+      <MotionBox
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        px={3}
+        py={2}
+        position="relative"
+        className={`fire-nav-item ${isActive ? 'active' : ''}`}
+      >
+        {children}
+      </MotionBox>
+    </Link>
+  );
+};
+
 // Honeycomb pattern component
 const HoneycombPattern = ({ isOpen }) => {
-  const bgColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(255, 255, 255, 0.1)');
+  const bgColor = 'rgba(0, 0, 0, 0.1)';
   
   return (
     <Box
@@ -97,7 +121,7 @@ const HoneycombPattern = ({ isOpen }) => {
               clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
               background: bgColor,
               border: '1px solid',
-              borderColor: useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(255, 255, 255, 0.1)'),
+              borderColor: 'rgba(255, 255, 255, 0.1)',
             }}
             initial={{ scale: 0, rotate: 0 }}
             animate={{ 
@@ -129,7 +153,6 @@ function ErrorFallback({ error }) {
 
 function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -139,9 +162,9 @@ function App() {
           flexDirection="column"
           minH="100vh"
           position="relative"
-          bg={useColorModeValue('gray.50', 'gray.900')}
+          bg="gray.300"
         >
-          {/* Header */}
+          {/* Enhanced Header */}
           <Box
             as="header"
             position="fixed"
@@ -149,14 +172,15 @@ function App() {
             left={0}
             right={0}
             zIndex={1000}
-            bg={useColorModeValue('white', 'gray.800')}
-            boxShadow="sm"
+            bg="rgba(24, 24, 24, 0.95)"
+            boxShadow="dark-lg"
             height={{ base: "60px", md: "70px", lg: "80px" }}
             transform="translateZ(0)"
-            backdropFilter="blur(8px)"
-            backgroundColor={useColorModeValue('rgba(255, 255, 255, 0.9)', 'rgba(26, 32, 44, 0.9)')}
+            backdropFilter="blur(10px)"
             borderBottom="1px solid"
-            borderColor={useColorModeValue('gray.200', 'gray.700')}
+            borderColor="whiteAlpha.100"
+            transition="all 0.3s ease-in-out"
+            className="fire-card"
           >
             <Container 
               maxW="container.xl" 
@@ -175,10 +199,10 @@ function App() {
                     <Text
                       fontSize={{ base: 'xl', md: '2xl' }}
                       fontWeight="bold"
-                      bgGradient="linear(to-r, blue.400, purple.500)"
-                      bgClip="text"
+                      className="fire-text"
                       position="relative"
                       zIndex={1}
+                      letterSpacing="wider"
                     >
                       Portfolio
                     </Text>
@@ -191,102 +215,25 @@ function App() {
                   display={{ base: 'none', md: 'flex' }}
                   alignItems="center"
                 >
-                  <Link to="/">
-                    <MotionBox
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      px={3}
-                      py={2}
-                    >
-                      Home
-                    </MotionBox>
-                  </Link>
-                  <Link to="/assets">
-                    <MotionBox
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      px={3}
-                      py={2}
-                    >
-                      Proof of Work
-                    </MotionBox>
-                  </Link>
-                  <Link to="/contact">
-                    <MotionBox
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      px={3}
-                      py={2}
-                    >
-                      Contact Us
-                    </MotionBox>
-                  </Link>
-                  <MotionBox
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <IconButton
-                      onClick={toggleColorMode}
-                      icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-                      variant="unstyled"
-                      colorScheme="blue"
-                      aria-label={`Toggle ${colorMode === 'light' ? 'Dark' : 'Light'} Mode`}
-                      _hover={{
-                        bg: useColorModeValue('blue.50', 'blue.900'),
-                      }}
-                      _active={{
-                        border: 'none',
-                        outline: 'none',
-                        boxShadow: 'none'
-                      }}
-                      _focus={{
-                        border: 'none',
-                        outline: 'none',
-                        boxShadow: 'none'
-                      }}
-                      sx={{
-                        border: 'none !important',
-                        outline: 'none !important',
-                        boxShadow: 'none !important'
-                      }}
-                    />
-                  </MotionBox>
+                  <NavItem to="/">Home</NavItem>
+                  <NavItem to="/assets">Proof of Work</NavItem>
+                  <NavItem to="/contact">Contact Us</NavItem>
                 </HStack>
 
-                {/* Mobile Navigation */}
-                <HStack spacing={2} display={{ base: 'flex', md: 'none' }}>
-                  <IconButton
-                    onClick={toggleColorMode}
-                    icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-                    variant="unstyled"
-                    colorScheme="blue"
-                    aria-label={`Toggle ${colorMode === 'light' ? 'Dark' : 'Light'} Mode`}
-                    _hover={{
-                      bg: useColorModeValue('blue.50', 'blue.900'),
-                    }}
-                    _active={{
-                      border: 'none',
-                      outline: 'none',
-                      boxShadow: 'none'
-                    }}
-                    _focus={{
-                      border: 'none',
-                      outline: 'none',
-                      boxShadow: 'none'
-                    }}
-                    sx={{
-                      border: 'none !important',
-                      outline: 'none !important',
-                      boxShadow: 'none !important'
-                    }}
-                  />
-                  <IconButton
-                    onClick={onOpen}
-                    icon={<HamburgerIcon />}
-                    variant="ghost"
-                    aria-label="Open menu"
-                  />
-                </HStack>
+                {/* Mobile menu button */}
+                <IconButton
+                  display={{ base: 'flex', md: 'none' }}
+                  onClick={onOpen}
+                  variant="ghost"
+                  icon={<HamburgerIcon />}
+                  aria-label="Open menu"
+                  size="lg"
+                  className="fire-icon"
+                  color="whiteAlpha.900"
+                  _hover={{
+                    bg: 'whiteAlpha.100'
+                  }}
+                />
               </Box>
             </Container>
           </Box>
@@ -295,18 +242,19 @@ function App() {
           <AnimatePresence>
             {isOpen && (
               <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-                <DrawerOverlay />
+                <DrawerOverlay bg="blackAlpha.800" />
                 <MotionDrawerContent
                   initial={{ x: '100%' }}
                   animate={{ x: 0 }}
                   exit={{ x: '100%' }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                   position="relative"
+                  bg="gray.300"
                 >
                   <HoneycombPattern isOpen={isOpen} />
                   <Box position="relative" zIndex={2}>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Menu</DrawerHeader>
+                    <DrawerCloseButton className="fire-icon" color="whiteAlpha.900" />
+                    <DrawerHeader className="fire-text">Menu</DrawerHeader>
                     <DrawerBody>
                       <VStack spacing={4} align="stretch">
                         <Link to="/" onClick={onClose}>
@@ -314,6 +262,8 @@ function App() {
                             whileHover={{ scale: 1.05, x: 10 }}
                             whileTap={{ scale: 0.95 }}
                             p={2}
+                            className="fire-nav-item"
+                            color="whiteAlpha.900"
                           >
                             Home
                           </MotionBox>
@@ -323,6 +273,8 @@ function App() {
                             whileHover={{ scale: 1.05, x: 10 }}
                             whileTap={{ scale: 0.95 }}
                             p={2}
+                            className="fire-nav-item"
+                            color="whiteAlpha.900"
                           >
                             Proof of Work
                           </MotionBox>
@@ -332,6 +284,8 @@ function App() {
                             whileHover={{ scale: 1.05, x: 10 }}
                             whileTap={{ scale: 0.95 }}
                             p={2}
+                            className="fire-nav-item"
+                            color="whiteAlpha.900"
                           >
                             Contact Us
                           </MotionBox>

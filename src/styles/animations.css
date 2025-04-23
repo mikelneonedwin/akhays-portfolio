@@ -1,0 +1,303 @@
+@keyframes fireGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5),
+                0 0 10px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8),
+                0 0 30px rgba(255, 215, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5),
+                0 0 10px rgba(255, 215, 0, 0.3);
+  }
+}
+
+@keyframes fireFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Fire Text Effect */
+.fire-text {
+  background: linear-gradient(45deg, #ff0000, #ff4d00, #ffd700);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  position: relative;
+  animation: fireGradient 3s ease infinite;
+}
+
+@keyframes fireTextPulse {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.3),
+                 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.5),
+                 0 0 40px rgba(255, 215, 0, 0.4);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.3),
+                 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+}
+
+.fire-button {
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff4d00,
+    #ffd700,
+    #ff4d00,
+    #ff0000
+  );
+  background-size: 300% 300%;
+  animation: fireGradient 5s ease infinite;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.fire-button:hover {
+  animation: fireGradient 3s ease infinite, glowPulse 2s infinite;
+  transform: translateY(-2px);
+}
+
+.fire-button:active {
+  transform: translateY(0);
+}
+
+/* Fire Card Effect */
+.fire-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.fire-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.1) 0%,
+    rgba(255, 0, 0, 0.1) 30%,
+    rgba(255, 0, 0, 0) 70%
+  );
+  animation: fireCardPulse 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes fireCardPulse {
+  0% {
+    transform: translate(-30%, -30%) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-30%, -30%) rotate(180deg);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-30%, -30%) rotate(360deg);
+    opacity: 0.5;
+  }
+}
+
+/* Fire Icon Effect */
+.fire-icon {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.fire-icon:hover {
+  background: linear-gradient(45deg, #ff0000, #ffd700);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  transform: scale(1.1);
+}
+
+.fire-icon:hover::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.2) 0%,
+    rgba(255, 0, 0, 0.2) 50%,
+    rgba(255, 0, 0, 0) 70%
+  );
+  animation: fireIconPulse 1s infinite;
+  pointer-events: none;
+}
+
+@keyframes fireIconPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+/* Fire Nav Item Effect */
+.fire-nav-item {
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.fire-nav-item:hover,
+.fire-nav-item.active {
+  background: linear-gradient(45deg, #ff0000, #ffd700);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.fire-nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff0000, #ffd700, transparent);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.fire-nav-item:hover::after,
+.fire-nav-item.active::after {
+  transform: scaleX(1);
+}
+
+/* Add a subtle glow for active state */
+.fire-nav-item.active {
+  position: relative;
+}
+
+.fire-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.1) 0%,
+    rgba(255, 0, 0, 0.1) 50%,
+    rgba(255, 0, 0, 0) 70%
+  );
+  pointer-events: none;
+  animation: activeGlow 2s infinite;
+}
+
+@keyframes activeGlow {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* Honeycomb Pattern Animation */
+.honeycomb {
+  opacity: 0.1;
+  transition: all 0.3s ease;
+}
+
+.honeycomb:hover {
+  opacity: 0.2;
+  transform: scale(1.1);
+}
+
+/* Page Transition Effects */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .fire-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .fire-button:hover {
+    transform: translateY(-1px);
+  }
+
+  .fire-icon:hover {
+    animation: fireFloat 1.5s ease infinite;
+  }
+}
+
+@media (max-width: 480px) {
+  .fire-card {
+    animation: none;
+  }
+
+  .fire-card:hover {
+    transform: translateY(-2px);
+    animation: glowPulse 2s infinite;
+  }
+} 
