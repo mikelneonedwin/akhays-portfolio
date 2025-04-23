@@ -127,36 +127,8 @@ const Contact = () => {
       position="relative"
       overflow="hidden"
       py={{ base: 20, md: 28 }}
+      bg="gray.300"
     >
-      {/* Background Video */}
-      <Box
-        position="absolute"
-        top={0}
-        left={0}
-        right={0}
-        bottom={0}
-        zIndex={0}
-        opacity={0.15}
-      >
-        <Box
-          as="video"
-          position="absolute"
-          top="50%"
-          left="50%"
-          minWidth="100%"
-          minHeight="100%"
-          width="auto"
-          height="auto"
-          transform="translate(-50%, -50%)"
-          objectFit="cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          src="https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4"
-        />
-      </Box>
-
       <Container maxW="container.xl" position="relative" zIndex={1}>
         <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={12}>
           {/* Contact Form */}
