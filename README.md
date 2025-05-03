@@ -5,13 +5,14 @@ A sleek and interactive portfolio website built with React, Chakra UI, and Frame
 ## ✨ Features
 
 - 🚀 Interactive animations and transitions
+- 🎨 Modern UI with glassmorphism effects
+- 🔥 Fire-themed animations and effects
 - 📱 Fully responsive design
 - 🌓 Light/Dark mode support
 - 🎨 Modern UI with Chakra UI components
 - 🔄 Smooth page transitions
 - 🎯 Project showcase with technology detection
 - 📬 Contact form integration
-- 🍯 Animated honeycomb menu pattern
 - 🚀 Flying rocket header animation
 
 ## 🛠️ Built With
@@ -153,3 +154,9 @@ Project Link: [https://github.com/yourusername/portfolio-app](https://github.com
 - [React Icons](https://react-icons.github.io/react-icons/)
 - [Framer Motion](https://www.framer.com/motion/)
 - [Chakra UI](https://chakra-ui.com/)
+
+## Features
+- Responsive design for all screen sizes
+- Modern glassmorphism effects
+- Smooth page transitions
+- Interactive UI elements

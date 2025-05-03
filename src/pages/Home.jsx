@@ -1,400 +1,452 @@
-import { Box, Button, Container, Heading, Text, VStack, Image, Tag, HStack, Link, useColorModeValue, Icon, SimpleGrid, Flex } from '@chakra-ui/react';
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt, FaCode, FaDatabase, FaServer, FaPalette } from 'react-icons/fa';
-import { detectTechnologies } from '../utils/techDetector';
+import { Box, Button, Container, Heading, Text, VStack, Image, Tag, HStack, Link, Icon, SimpleGrid, Flex } from '@chakra-ui/react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaArrowDown, FaExternalLinkAlt } from 'react-icons/fa';
+import ScrollAnimation from '../components/ScrollAnimation';
 import '../styles/animations.css';
+
+const MotionBox = motion(Box);
+const MotionFlex = motion(Flex);
 
 const projects = [
   {
     title: 'Flask REST API',
+    subtitle: 'NEXT JS, LOCOMOTIVE SCROLL, FRAMER MOTION',
     description: 'A comprehensive backend system featuring JWT authentication, SQLAlchemy ORM, and Swagger documentation. Includes user management, role-based access control, and automated testing.',
     image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    files: [
-      'app.py',
-      'models/user.py',
-      'routes/auth.py',
-      'tests/test_api.py',
-      'config.py'
-    ],
     github: 'https://github.com',
     demo: 'https://demo.com',
   },
   {
     title: 'AI Image Editor',
+    subtitle: 'REACT JS, FRAMER MOTION',
     description: 'An intelligent image processing application that leverages OpenAI\'s CLIP model for smart image classification and editing. Built with Python and modern AI frameworks.',
     image: 'https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    files: [
-      'main.py',
-      'services/ai_processor.py',
-      'utils/image_utils.py',
-      'models/clip_model.py'
-    ],
     github: 'https://github.com',
     demo: 'https://demo.com',
   },
   {
-    title: 'Hospital Management System',
+    title: 'Hospital Management',
+    subtitle: 'REACT JS, NODE JS, MONGO DB, EXPRESS',
     description: 'A full-stack healthcare management solution with appointment scheduling, patient records, and medical inventory tracking. Features real-time updates and secure data handling.',
     image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    files: [
-      'server/app.py',
-      'database/models.py',
-      'services/scheduler.py',
-      'api/appointments.py',
-      'utils/security.py'
-    ],
     github: 'https://github.com',
     demo: 'https://demo.com',
   },
 ];
 
-const SLIDE_DURATION = 3000; // 3 seconds per slide
-const MotionBox = motion(Box);
-const MotionFlex = motion(Flex);
-
-const skills = [
-  { name: 'Frontend Development', icon: FaCode, description: 'Building responsive and interactive user interfaces with modern frameworks.' },
-  { name: 'Backend Development', icon: FaServer, description: 'Creating robust server-side applications and APIs.' },
-  { name: 'Database Design', icon: FaDatabase, description: 'Designing and optimizing database schemas and queries.' },
-  { name: 'UI/UX Design', icon: FaPalette, description: 'Crafting beautiful and intuitive user experiences.' },
-];
-
-const VideoBackground = () => (
-  <Box
-    position="absolute"
-    top={0}
-    left={0}
-    width="100%"
-    height="100%"
-    overflow="hidden"
-    zIndex={0}
-  >
-    <Box
-      as="video"
-      position="absolute"
-      top="50%"
-      left="50%"
-      minWidth="100%"
-      minHeight="100%"
-      width="auto"
-      height="auto"
-      transform="translate(-50%, -50%)"
-      objectFit="cover"
-      autoPlay
-      muted
-      loop
-      playsInline
-      src="https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4"
-      opacity={0.15}
-    />
-  </Box>
-);
-
-const SkillCard = ({ skill }) => (
-  <MotionBox
-    whileHover={{ y: -5, boxShadow: 'xl' }}
-    transition={{ duration: 0.2 }}
-    bg={useColorModeValue('white', 'gray.800')}
-    p={6}
-    borderRadius="lg"
-    boxShadow="md"
-    textAlign="center"
-  >
-    <Icon
-      as={skill.icon}
-      w={10}
-      h={10}
-      mb={4}
-      color={useColorModeValue('blue.500', 'blue.300')}
-    />
-    <Heading size="md" mb={2}>
-      {skill.name}
-    </Heading>
-    <Text color={useColorModeValue('gray.600', 'gray.400')}>
-      {skill.description}
-    </Text>
-  </MotionBox>
-);
-
 const Home = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [slideDirection, setSlideDirection] = useState(1); // 1 for right
-
-  const nextSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => {
-      const nextIndex = (prevIndex + 1) % projects.length;
-      setSlideDirection(1); // Always slide right
-      return nextIndex;
-    });
-  }, []);
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => {
-      const nextIndex = (prevIndex - 1 + projects.length) % projects.length;
-      setSlideDirection(-1);
-      return nextIndex;
-    });
-  };
-
-  useEffect(() => {
-    let slideTimer;
-    if (!isPaused) {
-      slideTimer = setInterval(nextSlide, SLIDE_DURATION);
-    }
-    return () => {
-      if (slideTimer) {
-        clearInterval(slideTimer);
-      }
-    };
-  }, [isPaused, nextSlide]);
-
   return (
     <Box>
       {/* Hero Section */}
       <Box
         position="relative"
-        height={{ base: "90vh", md: "100vh" }}
+        height="100vh"
         display="flex"
         alignItems="center"
+        justifyContent="center"
+        bg="gray.300"
         overflow="hidden"
+        _before={{
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 50% 50%, rgba(102, 0, 255, 0.15) 0%, rgba(0, 163, 255, 0.15) 100%)',
+          filter: 'blur(100px)',
+          transform: 'scale(1.2)',
+          zIndex: 0,
+        }}
       >
-        <VideoBackground />
-        <Container maxW="container.xl" position="relative" zIndex={1}>
-          <MotionFlex
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            direction="column"
-            align="center"
-            textAlign="center"
-          >
-          <Heading
-            as="h1"
-              fontSize={{ base: '4xl', md: '5xl', lg: '7xl' }}
-            fontWeight="bold"
-              className="fire-text"
-            mb={6}
-          >
-              Backend Developer Portfolio
-          </Heading>
-          <Text 
-              fontSize={{ base: 'xl', md: '2xl' }}
-              color={useColorModeValue('gray.700', 'gray.300')}
-            maxW="3xl"
-              mb={8}
-            >
-              Providing the best Project Experience with innovative solutions and scalable architecture.
-            </Text>
-            <Button
-              as={motion.button}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              size="lg"
-              px={8}
-              color="white"
-              className="fire-button"
-              _hover={{
-                transform: "translateY(-2px)",
-                boxShadow: "xl",
+        {/* Floating Elements */}
+        <Box
+          position="absolute"
+          top="0"
+          left="0"
+          right="0"
+          bottom="0"
+          zIndex={1}
+          overflow="hidden"
+          pointerEvents="none"
+        >
+          {[...Array(20)].map((_, i) => (
+            <MotionBox
+              key={i}
+              position="absolute"
+              top={`${Math.random() * 100}%`}
+              left={`${Math.random() * 100}%`}
+              width={`${Math.random() * 10 + 5}px`}
+              height={`${Math.random() * 10 + 5}px`}
+              borderRadius="full"
+              bg={i % 2 === 0 ? 'brand.500' : 'accent.500'}
+              opacity={0.3}
+              animate={{
+                y: [0, Math.random() * 100 - 50],
+                x: [0, Math.random() * 100 - 50],
+                scale: [1, Math.random() * 0.5 + 1],
+                opacity: [0.3, 0.6],
               }}
-              onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
+              transition={{
+                duration: Math.random() * 5 + 5,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }}
+            />
+          ))}
+        </Box>
+        <Container maxW="container.lg" position="relative" zIndex={2}>
+          <VStack spacing={8} textAlign="center">
+            <MotionBox
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              View My Work
-            </Button>
-          </MotionFlex>
+              <Heading
+                as="h1"
+                fontSize={{ base: '4xl', md: '6xl' }}
+                className="gradient-text"
+                mb={4}
+              >
+                Hi, I'm Your Name
+              </Heading>
+              <Text
+                fontSize={{ base: 'xl', md: '2xl' }}
+                color="whiteAlpha.900"
+                maxW="2xl"
+                mx="auto"
+              >
+                Full Stack Developer & Blockchain Engineer
+              </Text>
+            </MotionBox>
+
+            <MotionBox
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              <HStack spacing={6} justify="center">
+                <Link href="https://github.com" isExternal>
+                  <Icon as={FaGithub} w={8} h={8} className="glow-icon" />
+                </Link>
+                <Link href="https://linkedin.com" isExternal>
+                  <Icon as={FaLinkedin} w={8} h={8} className="glow-icon" />
+                </Link>
+                <Link href="https://twitter.com" isExternal>
+                  <Icon as={FaTwitter} w={8} h={8} className="glow-icon" />
+                </Link>
+                <Link href="mailto:your.email@example.com">
+                  <Icon as={FaEnvelope} w={8} h={8} className="glow-icon" />
+                </Link>
+              </HStack>
+            </MotionBox>
+
+            <MotionBox
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="scroll-indicator"
+              marginTop={8}
+            >
+              <Icon
+                as={FaArrowDown}
+                w={8}
+                h={8}
+                color="brand.500"
+                cursor="pointer"
+                onClick={() => {
+                  const aboutSection = document.getElementById('about');
+                  aboutSection?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              />
+            </MotionBox>
+          </VStack>
         </Container>
       </Box>
 
-      {/* Skills Section */}
+      {/* About Section */}
       <Box
-        py={{ base: 16, md: 24 }}
+        id="about"
+        py={20}
+        bg="gray.500"
         position="relative"
-        overflow="hidden"
+        _before={{
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(135deg, rgba(102, 0, 255, 0.1) 0%, rgba(0, 163, 255, 0.1) 100%)',
+          zIndex: 0,
+        }}
       >
-        <Container maxW="container.xl">
-          <VStack spacing={12}>
-            <Heading
-              as="h2"
-              fontSize={{ base: '3xl', md: '4xl' }}
+        <Container maxW="container.lg" position="relative" zIndex={1}>
+          <VStack spacing={16}>
+            <MotionBox
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
               textAlign="center"
-              mb={8}
-              className="fire-text"
+              maxW="800px"
             >
-              My Skills
-            </Heading>
+              <Heading
+                as="h2"
+                fontSize={{ base: '3xl', md: '4xl' }}
+                className="gradient-text"
+                mb={6}
+              >
+                About Me
+              </Heading>
+              <Text
+                fontSize={{ base: 'lg', md: 'xl' }}
+                color="whiteAlpha.900"
+                lineHeight="tall"
+                mb={8}
+              >
+                I'm a passionate developer with expertise in full-stack development
+                and blockchain technologies. With a strong foundation in modern web
+                technologies and a deep understanding of decentralized systems,
+                I create innovative solutions that bridge the gap between traditional
+                web applications and the blockchain ecosystem.
+              </Text>
+            </MotionBox>
+
             <SimpleGrid
-              columns={{ base: 1, md: 2, lg: 4 }}
-              spacing={8}
-              width="100%"
+              columns={{ base: 1, md: 2 }}
+              spacing={10}
+              w="full"
             >
-              {skills.map((skill, index) => (
-                <MotionBox
-                  key={index}
-                  whileHover={{ y: -5, boxShadow: 'xl' }}
-                  transition={{ duration: 0.2 }}
-                  bg="rgba(26, 32, 44, 0.7)"
-                  p={6}
-                  borderRadius="lg"
-                  boxShadow="md"
-                  textAlign="center"
-                  border="1px solid"
-                  borderColor="whiteAlpha.200"
-                  backdropFilter="blur(10px)"
-                >
-                  <Icon
-                    as={skill.icon}
-                    w={10}
-                    h={10}
-                    mb={4}
-                    className="fire-icon"
-                  />
-                  <Heading size="md" mb={2} color="whiteAlpha.900">
-                    {skill.name}
-                  </Heading>
-                  <Text color="whiteAlpha.800">
-                    {skill.description}
-          </Text>
-                </MotionBox>
-              ))}
+              <MotionBox
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="glass-card"
+                p={8}
+                borderRadius="2xl"
+                _hover={{
+                  transform: 'translateY(-5px)',
+                  boxShadow: '2xl',
+                }}
+              >
+                <VStack spacing={6} align="flex-start">
+                  <Heading size="md" className="gradient-text">Technical Expertise</Heading>
+                  <SimpleGrid columns={2} spacing={4} w="full">
+                    {['React', 'Node.js', 'Solidity', 'Web3.js', 'TypeScript', 'MongoDB'].map((skill) => (
+                      <Tag
+                        key={skill}
+                        size="lg"
+                        variant="subtle"
+                        className="glass-card"
+                        p={3}
+                        justifyContent="center"
+                        _hover={{
+                          transform: 'scale(1.05)',
+                          bg: 'whiteAlpha.200',
+                        }}
+                        transition="all 0.3s"
+                      >
+                        {skill}
+                      </Tag>
+                    ))}
+                  </SimpleGrid>
+                </VStack>
+              </MotionBox>
+
+              <MotionBox
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="glass-card"
+                p={8}
+                borderRadius="2xl"
+                _hover={{
+                  transform: 'translateY(-5px)',
+                  boxShadow: '2xl',
+                }}
+              >
+                <VStack spacing={6} align="flex-start">
+                  <Heading size="md" className="gradient-text">What I Do</Heading>
+                  <VStack spacing={4} align="stretch">
+                    {[
+                      'Full Stack Development',
+                      'Blockchain Integration',
+                      'Smart Contract Development',
+                      'UI/UX Design',
+                    ].map((item) => (
+                      <HStack
+                        key={item}
+                        p={3}
+                        bg="whiteAlpha.100"
+                        borderRadius="lg"
+                        _hover={{
+                          bg: 'whiteAlpha.200',
+                          transform: 'translateX(5px)',
+                        }}
+                        transition="all 0.3s"
+                      >
+                        <Box
+                          w={2}
+                          h={2}
+                          borderRadius="full"
+                          bg="brand.500"
+                        />
+                        <Text color="whiteAlpha.900">{item}</Text>
+                      </HStack>
+                    ))}
+                  </VStack>
+                </VStack>
+              </MotionBox>
             </SimpleGrid>
           </VStack>
         </Container>
-        </Box>
+      </Box>
 
       {/* Projects Section */}
       <Box
         id="projects"
-        py={{ base: 16, md: 24 }}
+        py={20}
+        position="relative"
+        bg="gray.300"
+        overflow="hidden"
+        _before={{
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 50% 50%, rgba(102, 0, 255, 0.15) 0%, rgba(0, 163, 255, 0.15) 100%)',
+          filter: 'blur(100px)',
+          transform: 'scale(1.2)',
+          zIndex: 0,
+        }}
       >
-        <Container maxW="container.xl">
-          <VStack spacing={12}>
-            <Heading
-              as="h2"
-              fontSize={{ base: '3xl', md: '4xl' }}
-              textAlign="center"
-              mb={8}
-              className="fire-text"
-            >
-              Featured Projects
-            </Heading>
-
-        <Box 
-          position="relative" 
-          overflow="hidden"
-          bg={useColorModeValue('white', 'gray.800')}
-          borderRadius="xl"
-          boxShadow="xl"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-              width="100%"
-            >
-          <AnimatePresence mode="wait">
-            <MotionBox
-              key={currentIndex}
-              initial={{ 
-                x: slideDirection === 1 ? '100%' : '-100%',
-                opacity: 0 
-              }}
-              animate={{ 
-                x: 0,
-                opacity: 1 
-              }}
-              exit={{ 
-                x: slideDirection === 1 ? '-100%' : '100%',
-                opacity: 0 
-              }}
-              transition={{ 
-                type: "tween",
-                duration: 0.5,
-                ease: "easeInOut"
-              }}
-              width="100%"
-              p={8}
-            >
-              <Box
-                display="flex"
-                flexDirection={{ base: "column", md: "row" }}
-                gap={8}
-                alignItems="center"
+        <Container maxW="container.xl" position="relative" zIndex={1}>
+          <VStack spacing={16} align="stretch">
+            <Box textAlign="center">
+              <Text
+                fontSize="sm"
+                fontWeight="semibold"
+                color="brand.500"
+                textTransform="uppercase"
+                mb={3}
               >
-                <Box
-                  flex="1"
-                  position="relative"
-                  height={{ base: "200px", md: "300px" }}
-                  width="100%"
-                  overflow="hidden"
-                  borderRadius="lg"
-                >
-                  <Image
-                    src={projects[currentIndex].image}
-                    alt={projects[currentIndex].title}
-                    objectFit="cover"
-                    width="100%"
-                    height="100%"
-                    transition="transform 0.5s ease"
-                    _hover={{ transform: 'scale(1.05)' }}
-                  />
-                </Box>
-                <Box flex="1">
-                  <Heading
-                    as="h3"
-                    size="lg"
-                    mb={4}
-                    color={useColorModeValue('gray.800', 'white')}
+                Yeah, I work hard 💼
+              </Text>
+              <Heading
+                as="h2"
+                fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}
+                fontWeight="bold"
+                color="whiteAlpha.900"
+                className="gradient-text"
+              >
+                Each project is unique.<br />
+                Here are some of my works.
+              </Heading>
+            </Box>
+
+            <SimpleGrid
+              columns={{ base: 1, md: 2 }}
+              spacing={{ base: 8, md: 12 }}
+            >
+              {projects.map((project, index) => (
+                <ScrollAnimation key={index} delay={index * 0.2}>
+                  <MotionBox
+                    className="glass-card"
+                    borderRadius="2xl"
+                    overflow="hidden"
+                    whileHover={{ y: -5 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    {projects[currentIndex].title}
-                  </Heading>
-                  <Text
-                    color={useColorModeValue('gray.600', 'gray.300')}
-                    mb={6}
-                    fontSize="md"
-                    lineHeight="tall"
-                  >
-                    {projects[currentIndex].description}
-                  </Text>
-                  <HStack spacing={2} mb={6} flexWrap="wrap" gap={2}>
-                    {detectTechnologies(projects[currentIndex].files, projects[currentIndex].description).map((tech) => (
-                      <Tag
-                        key={tech}
-                        size="md"
-                        variant="subtle"
-                        colorScheme="blue"
-                        borderRadius="full"
-                        px={4}
-                        py={1}
+                    <Box position="relative" overflow="hidden">
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        w="full"
+                        h="300px"
+                        objectFit="cover"
+                        transition="transform 0.3s ease"
+                        _groupHover={{ transform: 'scale(1.05)' }}
+                      />
+                      <Box
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        right={0}
+                        bottom={0}
+                        bg="blackAlpha.600"
+                        backdropFilter="blur(2px)"
+                        opacity={0}
+                        transition="opacity 0.3s ease"
+                        _groupHover={{ opacity: 1 }}
+                      />
+                    </Box>
+
+                    <VStack
+                      spacing={4}
+                      p={8}
+                      align="flex-start"
+                    >
+                      <Text
+                        fontSize="sm"
+                        fontWeight="semibold"
+                        color="brand.500"
+                        letterSpacing="wider"
                       >
-                        {tech}
-                      </Tag>
-                    ))}
-                  </HStack>
-                  <HStack spacing={4}>
-                    <Link href={projects[currentIndex].github} isExternal>
-                      <Button
-                        leftIcon={<FaGithub />}
-                        colorScheme="blue"
-                        variant="outline"
+                        {project.subtitle}
+                      </Text>
+                      
+                      <Heading
+                        as="h3"
+                        fontSize={{ base: '2xl', md: '3xl' }}
+                        color="whiteAlpha.900"
+                        className="gradient-text"
                       >
-                        View Code
-                      </Button>
-                    </Link>
-                    <Link href={projects[currentIndex].demo} isExternal>
-                      <Button
-                        leftIcon={<FaExternalLinkAlt />}
-                        colorScheme="blue"
+                        {project.title}
+                      </Heading>
+
+                      <Text
+                        color="whiteAlpha.800"
+                        fontSize="lg"
+                        lineHeight="tall"
                       >
-                        Live Demo
-                      </Button>
-                    </Link>
-                  </HStack>
-                </Box>
-              </Box>
-            </MotionBox>
-          </AnimatePresence>
-        </Box>
-      </VStack>
-    </Container>
+                        {project.description}
+                      </Text>
+
+                      <HStack spacing={4} pt={4}>
+                        <Link href={project.github} isExternal>
+                          <Button
+                            leftIcon={<FaGithub />}
+                            variant="ghost"
+                            size="lg"
+                            className="glow-icon"
+                          >
+                            View Code
+                          </Button>
+                        </Link>
+                        <Link href={project.demo} isExternal>
+                          <Button
+                            leftIcon={<FaExternalLinkAlt />}
+                            variant="gradient"
+                            size="lg"
+                          >
+                            Live Demo
+                          </Button>
+                        </Link>
+                      </HStack>
+                    </VStack>
+                  </MotionBox>
+                </ScrollAnimation>
+              ))}
+            </SimpleGrid>
+          </VStack>
+        </Container>
       </Box>
     </Box>
   );

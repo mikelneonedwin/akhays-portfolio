@@ -2,7 +2,6 @@ import { Box, Text, IconButton, useDisclosure, Drawer, DrawerOverlay, DrawerCont
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Assets from './pages/assets';
-import Contact from './pages/Contact';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from './components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -69,74 +68,6 @@ const NavItem = ({ to, children }) => {
         {children}
       </MotionBox>
     </Link>
-  );
-};
-
-// Honeycomb pattern component
-const HoneycombPattern = ({ isOpen }) => {
-  const bgColor = 'rgba(0, 0, 0, 0.1)';
-  
-  return (
-    <Box
-      position="absolute"
-      top={0}
-      left={0}
-      right={0}
-      bottom={0}
-      overflow="hidden"
-      opacity={0.3}
-      pointerEvents="none"
-    >
-      <motion.div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: ['repeat(2, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)'],
-          gap: ['20px', '30px', '40px'],
-          padding: ['20px', '30px', '40px'],
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '100%',
-          height: '100%',
-        }}
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={{ 
-          scale: isOpen ? 1 : 0.5,
-          opacity: isOpen ? 1 : 0,
-        }}
-        transition={{ 
-          duration: 3,
-          delay: 1,
-          ease: "easeOut"
-        }}
-      >
-        {[...Array(9)].map((_, i) => (
-          <motion.div
-            key={i}
-            style={{
-              width: '100%',
-              paddingBottom: '115.47%', // Hexagon aspect ratio
-              position: 'relative',
-              clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-              background: bgColor,
-              border: '1px solid',
-              borderColor: 'rgba(255, 255, 255, 0.1)',
-            }}
-            initial={{ scale: 0, rotate: 0 }}
-            animate={{ 
-              scale: isOpen ? 1 : 0,
-              rotate: isOpen ? 360 : 0,
-            }}
-            transition={{ 
-              duration: 3,
-              delay: 1 + (i * 0.1),
-              ease: "easeOut"
-            }}
-          />
-        ))}
-      </motion.div>
-    </Box>
   );
 };
 
@@ -217,11 +148,10 @@ function App() {
                 >
                   <NavItem to="/">Home</NavItem>
                   <NavItem to="/assets">Proof of Work</NavItem>
-                  <NavItem to="/contact">Contact Us</NavItem>
                 </HStack>
 
                 {/* Mobile menu button */}
-                <IconButton
+                  <IconButton
                   display={{ base: 'flex', md: 'none' }}
                   onClick={onOpen}
                   variant="ghost"
@@ -230,7 +160,7 @@ function App() {
                   size="lg"
                   className="fire-icon"
                   color="whiteAlpha.900"
-                  _hover={{
+                    _hover={{
                     bg: 'whiteAlpha.100'
                   }}
                 />
@@ -251,45 +181,13 @@ function App() {
                   position="relative"
                   bg="gray.300"
                 >
-                  <HoneycombPattern isOpen={isOpen} />
                   <Box position="relative" zIndex={2}>
                     <DrawerCloseButton className="fire-icon" color="whiteAlpha.900" />
                     <DrawerHeader className="fire-text">Menu</DrawerHeader>
                     <DrawerBody>
                       <VStack spacing={4} align="stretch">
-                        <Link to="/" onClick={onClose}>
-                          <MotionBox
-                            whileHover={{ scale: 1.05, x: 10 }}
-                            whileTap={{ scale: 0.95 }}
-                            p={2}
-                            className="fire-nav-item"
-                            color="whiteAlpha.900"
-                          >
-                            Home
-                          </MotionBox>
-                        </Link>
-                        <Link to="/assets" onClick={onClose}>
-                          <MotionBox
-                            whileHover={{ scale: 1.05, x: 10 }}
-                            whileTap={{ scale: 0.95 }}
-                            p={2}
-                            className="fire-nav-item"
-                            color="whiteAlpha.900"
-                          >
-                            Proof of Work
-                          </MotionBox>
-                        </Link>
-                        <Link to="/contact" onClick={onClose}>
-                          <MotionBox
-                            whileHover={{ scale: 1.05, x: 10 }}
-                            whileTap={{ scale: 0.95 }}
-                            p={2}
-                            className="fire-nav-item"
-                            color="whiteAlpha.900"
-                          >
-                            Contact Us
-                          </MotionBox>
-                        </Link>
+                        <NavItem to="/">Home</NavItem>
+                        <NavItem to="/assets">Proof of Work</NavItem>
                       </VStack>
                     </DrawerBody>
                   </Box>
@@ -298,28 +196,17 @@ function App() {
             )}
           </AnimatePresence>
 
-          {/* Main Content Wrapper */}
-          <Box
-            as="main"
-            flex="1"
-            mt={{ base: "60px", md: "70px", lg: "80px" }}
-            position="relative"
-            zIndex={1}
-            width="100%"
-          >
-            <Container
-              maxW="container.xl"
-              px={{ base: 4, md: 6, lg: 8 }}
-              py={{ base: 6, md: 8, lg: 10 }}
-            >
+          {/* Main Content */}
+          <Box as="main" flex="1" mt={{ base: "60px", md: "70px", lg: "80px" }}>
+            <AnimatePresence mode="wait">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/assets" element={<Assets />} />
-                <Route path="/contact" element={<Contact />} />
               </Routes>
-            </Container>
+            </AnimatePresence>
           </Box>
 
+          {/* Footer */}
           <Footer />
         </Box>
       </Router>

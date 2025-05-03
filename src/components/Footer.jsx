@@ -105,11 +105,11 @@ const Footer = () => {
           mb={8}
         >
           {/* Brand Section */}
-          <VStack align="flex-start" spacing={4}>
+            <VStack align="flex-start" spacing={4}>
             <Heading size="md" className="fire-text">Portfolio</Heading>
             <Text fontSize="sm" color="whiteAlpha.900">
               Building the future through code, one project at a time.
-            </Text>
+              </Text>
           </VStack>
 
           {/* Quick Links */}
@@ -118,7 +118,6 @@ const Footer = () => {
             <Stack spacing={2}>
               <Link href="/" className="fire-nav-item" color="whiteAlpha.900">Home</Link>
               <Link href="/assets" className="fire-nav-item" color="whiteAlpha.900">Projects</Link>
-              <Link href="/contact" className="fire-nav-item" color="whiteAlpha.900">Contact</Link>
             </Stack>
           </VStack>
 
@@ -134,8 +133,8 @@ const Footer = () => {
                   label={social.label}
                 />
               ))}
-            </HStack>
-          </VStack>
+              </HStack>
+            </VStack>
         </SimpleGrid>
         
         <Divider my={8} borderColor="whiteAlpha.200" />
