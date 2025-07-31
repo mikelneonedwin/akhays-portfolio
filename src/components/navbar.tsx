@@ -28,12 +28,6 @@ const Navbar = () => {
 
         {/* Right side: Resume + Avatar + Mobile menu */}
         <div className="flex items-center gap-2 sm:gap-4">
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-            <Button size="sm" className="hidden sm:inline-flex">
-              Download Resume
-            </Button>
-          </a>
-
           <Button
             variant="ghost"
             size="icon"
@@ -75,19 +69,6 @@ const Navbar = () => {
                 <SheetClose asChild>
                   <a href="#contact" className="hover:text-primary transition">
                     Contact
-                  </a>
-                </SheetClose>
-                <SheetClose asChild>
-                  <a
-                    href={"/resume.pdf"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-6 inline-block"
-                    download
-                  >
-                    <Button size="lg" className="w-full">
-                      Download Resume
-                    </Button>
                   </a>
                 </SheetClose>
               </nav>
